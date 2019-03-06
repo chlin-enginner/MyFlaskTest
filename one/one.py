@@ -15,9 +15,13 @@ def hello_world():
 def weixin():
     if request.method == 'GET':
         signature=request.args.get("signature")
+        print(signature)
         timestamp = request.args.get("timestamp")
+        print(timestamp)
         nonce = request.args.get("nonce")
+        print(nonce)
         echostr = request.args.get("echostr")
+        print(echostr)
 
         token = "csxwxapp"
 
@@ -34,4 +38,4 @@ def weixin():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0',port=5000)
+    app.run(host='0.0.0.0',port=80)
