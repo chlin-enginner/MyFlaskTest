@@ -5,6 +5,7 @@ import hashlib
 import time
 
 from lxml import etree
+import datetime
 
 import sys
 
@@ -50,30 +51,30 @@ def weixin():
             return "error"
     else:
         str_xml = request.data
-
-
         xml = etree.fromstring(str_xml)
-
-
         content = xml.find("Content").text
 
         msgType = xml.find("MsgType").text
         fromUser = xml.find("FromUserName").text
         touserName = xml.find("ToUserName").text
+        nowTime = str(time.time())
 
         app.logger.info("content:"+str(content))
         app.logger.info("touserName:"+str(touserName))
         app.logger.info("fromUser"+str(fromUser))
 
-        nowTime=str(time.time())
+        now = datetime.datetime.now()
+        now.strftime('%Y-%m-%d')
+        start_data = datetime.datetime.strptime('2019-02-05', '%Y-%m-%d')
+        run_days=(now-start_data).days
 
-
+        if str(content)=="/help":
+            content="您好！欢迎您！本号旨在探讨个人数据分析场景，并尝试使用简单、友好的方式帮助个人实现数据分析的需求。已累计运行"+run_days+"天，实现AI聊天接入功能，后续会有更多分析功能上线，敬请期待！多谢关注！"
+            # res_hlep="<xml><ToUserName><![CDATA["+str(fromUser)+"]]></ToUserName><FromUserName><![CDATA["+str(touserName)+"]]></FromUserName><CreateTime>"+nowTime+"</CreateTime><MsgType><![CDATA["+msgType+"]]></MsgType><Content><![CDATA["+str(content_help)+"]]></Content></xml>"
 
         res="<xml><ToUserName><![CDATA["+str(fromUser)+"]]></ToUserName><FromUserName><![CDATA["+str(touserName)+"]]></FromUserName><CreateTime>"+nowTime+"</CreateTime><MsgType><![CDATA["+msgType+"]]></MsgType><Content><![CDATA["+str(content)+"]]></Content></xml>"
 
         return Response(str(res),  mimetype='application/xml')
-
-
 
 
 if __name__ == '__main__':
