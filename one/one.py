@@ -60,8 +60,9 @@ def weixin():
 
         app.logger.info(str(event))
 
-        if str(event)=="subscribe":
-            content="/help"
+        if not event:
+            if str(event.text)=="subscribe":
+                content="/help"
 
 
         app.logger.info("content:"+str(content))
