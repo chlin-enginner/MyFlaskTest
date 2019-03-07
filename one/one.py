@@ -21,10 +21,10 @@ def tuling(content):
     content = req['results'][0]['values']['text']
     return content
 
-def lili(content):
+def event_sub(content):
+    return content
 
-
-
+def text_message(content):
     return content
 
 @app.route('/weixin',methods=['GET','POST'])
@@ -48,32 +48,24 @@ def weixin():
     else:
         str_xml = request.data
         xml = etree.fromstring(str_xml)
-
-
-
-        content = xml.find("Content").text
         msgType = xml.find("MsgType").text
         fromUser = xml.find("FromUserName").text
         touserName = xml.find("ToUserName").text
         nowTime = str(time.time())
-        event=xml.find("Event")
-
-        app.logger.info(str(event))
-
-        if not event is None:
-            if str(event.text)=="subscribe":
-                content="/help"
-
-
-        app.logger.info("content:"+str(content))
-        app.logger.info("touserName:"+str(touserName))
-        app.logger.info("fromUser"+str(fromUser))
-
         now = datetime.datetime.now()
         now.strftime('%Y-%m-%d')
         start_data = datetime.datetime.strptime('2019-02-05', '%Y-%m-%d')
-        run_days=(now-start_data).days
+        run_days = (now - start_data).days
 
+        content=""
+
+        if str(msgType)=="text":
+            content = xml.find("Content").text
+            # text_message(content)
+        elif str(msgType)=="event":
+            event = xml.find("Event").text
+            content = "/help"
+            # event_sub()
 
         if not str(content).startswith("/"):
             content=tuling(content)
@@ -89,7 +81,7 @@ def weixin():
             "]]></FromUserName><CreateTime>"+nowTime+"</CreateTime><MsgType><![CDATA["+msgType+\
             "]]></MsgType><Content><![CDATA["+str(content)+"]]></Content></xml>"
 
-        return Response(str(res),  mimetype='application/xml')
+        return Response(str(res),mimetype='application/xml')
 
 
 if __name__ == '__main__':
