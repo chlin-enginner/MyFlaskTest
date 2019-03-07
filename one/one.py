@@ -45,9 +45,15 @@ def weixin():
 
         content=request.args.get("Content")
 
+        app.logger.info("content:"+str(content))
+
         touserName=request.args.get("ToUserName")
+
+        app.logger.info("touserName:"+str(touserName))
         fromUser=request.args.get("FromUserName")
+        app.logger.info("fromUser"+str(fromUser))
         nowTime=str(time.time())
+
 
 
         res="<xml><ToUserName><![CDATA["+str(fromUser)+"]]></ToUserName><FromUserName><![CDATA["+str(touserName)+"]]></FromUserName><CreateTime>"+nowTime+"</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA["+str(content)+"]]></Content></xml>"
