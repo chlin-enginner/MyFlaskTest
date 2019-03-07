@@ -2,6 +2,7 @@ from flask import Flask
 from flask import request
 from flask import Response
 import hashlib
+import time
 
 app = Flask(__name__)
 
@@ -44,7 +45,12 @@ def weixin():
 
         content=request.args.get("Content")
 
-        res="<xml><ToUserName><![CDATA[toUser]]></ToUserName><FromUserName><![CDATA[fromUser]]></FromUserName><CreateTime>12345678</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA["+str(content)+"]]></Content></xml>"
+        touserName=request.args.get("ToUserName")
+        fromUser=request.args.get("FromUserName")
+        nowTime=int(time.time())
+
+
+        res="<xml><ToUserName><![CDATA["+str(fromUser)+"]]></ToUserName><FromUserName><![CDATA["+str(touserName)+"]]></FromUserName><CreateTime>"+nowTime+"</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA["+str(content)+"]]></Content></xml>"
 
         return Response(str(res),  mimetype='application/xml')
 
