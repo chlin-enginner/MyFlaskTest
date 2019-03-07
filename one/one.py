@@ -80,8 +80,11 @@ def weixin():
 
             api_url2 = "http://openapi.tuling123.com/openapi/api/v2"
 
+            app.logger.info("第一次：：：：：：：：：------------》》》》》》》》》》》》")
             req = requests.post(api_url2, json.dumps(say_ai_data)).json()
+            app.logger.info("第二次：：：：：：：：：：：：：：-----------》》》》》》》》")
             content=req['results'][0]['values']['text']
+            app.logger.info("第三次：：：：：：：：：：：：：：-----------》》》》》》》》")
 
         if str(content)=="/help":
             content="您好！欢迎您！本号旨在探讨个人数据分析场景，并尝试使用简单、" \
