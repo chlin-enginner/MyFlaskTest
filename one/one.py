@@ -85,7 +85,6 @@ def weixin():
         if str(content)=="/help":
             content="您好！欢迎您！本号旨在探讨个人数据分析场景，并尝试使用简单、友好的方式帮助个人实现数据分析的需求。已累计运行"+str(run_days)+"天，实现AI聊天接入功能，后续会有更多分析功能上线，敬请期待！多谢关注！"
 
-
         res="<xml><ToUserName><![CDATA["+str(fromUser)+"]]></ToUserName><FromUserName><![CDATA["+str(touserName)+"]]></FromUserName><CreateTime>"+nowTime+"</CreateTime><MsgType><![CDATA["+msgType+"]]></MsgType><Content><![CDATA["+str(content)+"]]></Content></xml>"
 
         return Response(str(res),  mimetype='application/xml')
