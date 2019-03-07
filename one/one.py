@@ -1,5 +1,6 @@
 from flask import Flask
 from flask import request
+from flask import Response
 import hashlib
 
 app = Flask(__name__)
@@ -11,7 +12,7 @@ def hello_world():
 
 
 
-@app.route('/weixin')
+@app.route('/weixin',methods=['GET','POST'])
 def weixin():
     app.logger.info("0method:"+request.method)
     app.logger.info("0url:"+request.url)
@@ -39,6 +40,13 @@ def weixin():
             return echostr
         else:
             return "error"
+    else:
+
+        content=request.args.get("Content")
+
+        res="<xml><ToUserName><![CDATA[toUser]]></ToUserName><FromUserName><![CDATA[fromUser]]></FromUserName><CreateTime>12345678</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA["+str(content)+"]]></Content></xml>"
+
+        return Response(str(res),  mimetype='application/xml')
 
 
 
