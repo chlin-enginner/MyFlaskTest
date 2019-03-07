@@ -4,6 +4,9 @@ from flask import Response
 import hashlib
 import time
 
+from lxml import etree
+
+
 app = Flask(__name__)
 
 
@@ -42,21 +45,27 @@ def weixin():
         else:
             return "error"
     else:
+        str_xml = request.data
 
-        content=request.args.get("Content")
+        # 获得post来的数据
+        xml = etree.fromstring(str_xml)
+        # 进行XML解析
+
+        content = xml.find("Content").text
+
+        msgType = xml.find("MsgType").text
+        fromUser = xml.find("FromUserName").text
+        touserName = xml.find("ToUserName").text
 
         app.logger.info("content:"+str(content))
-
-        touserName=request.args.get("ToUserName")
-
         app.logger.info("touserName:"+str(touserName))
-        fromUser=request.args.get("FromUserName")
         app.logger.info("fromUser"+str(fromUser))
+
         nowTime=str(time.time())
 
 
 
-        res="<xml><ToUserName><![CDATA["+str(fromUser)+"]]></ToUserName><FromUserName><![CDATA["+str(touserName)+"]]></FromUserName><CreateTime>"+nowTime+"</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA["+str(content)+"]]></Content></xml>"
+        res="<xml><ToUserName><![CDATA["+str(fromUser)+"]]></ToUserName><FromUserName><![CDATA["+str(touserName)+"]]></FromUserName><CreateTime>"+nowTime+"</CreateTime><MsgType><![CDATA["+msgType+"]]></MsgType><Content><![CDATA["+str(content)+"]]></Content></xml>"
 
         return Response(str(res),  mimetype='application/xml')
 
