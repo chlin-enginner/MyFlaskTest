@@ -14,14 +14,15 @@ def hello_world():
 @app.route('/weixin', methods=['GET', 'POST'])
 def weixin():
     if request.method == 'GET':
+        app.logger.info("url:" + request.url)
         signature=request.args.get("signature")
-        print(signature)
+        app.logger.info("signature:"+signature)
         timestamp = request.args.get("timestamp")
-        print(timestamp)
+        app.logger.info("signature:" + signature)
         nonce = request.args.get("nonce")
-        print(nonce)
+        app.logger.info("signature:" + signature)
         echostr = request.args.get("echostr")
-        print(echostr)
+        app.logger.info("signature:" + signature)
 
         token = "csxwxapp"
 
@@ -30,7 +31,7 @@ def weixin():
         ts = ''.join(list)
 
         hashcode = hashlib.sha1(ts.encode('utf-8')).hexdigest()
-
+        app.logger.info("hashcode:" + hashcode)
         if hashcode == signature:
             return echostr
 
