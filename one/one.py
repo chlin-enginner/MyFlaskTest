@@ -63,6 +63,7 @@ def weixin():
             content = xml.find("Content").text
             # text_message(content)
         elif str(msgType)=="event":
+            msgType="text"
             event = xml.find("Event").text
             content = "/help"
             # event_sub()
