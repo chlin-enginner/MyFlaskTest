@@ -11,7 +11,7 @@ def hello_world():
 
 
 
-@app.route('/weixin', methods=['GET', 'POST'])
+@app.route('/weixin')
 def weixin():
     if request.method == 'GET':
         app.logger.info("url:" + request.url)
