@@ -56,7 +56,9 @@ def weixin():
         fromUser = xml.find("FromUserName").text
         touserName = xml.find("ToUserName").text
         nowTime = str(time.time())
-        event=xml.find("Event").text
+        event=xml.find("Event")
+
+        app.logger.info(str(event))
 
         if str(event)=="subscribe":
             content="/help"
