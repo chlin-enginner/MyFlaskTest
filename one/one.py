@@ -13,6 +13,8 @@ def hello_world():
 
 @app.route('/weixin')
 def weixin():
+    app.logger.info("0method:"+request.method)
+    app.logger.info("0url:"+request.url)
     if request.method == 'GET':
         app.logger.info("url:" + request.url)
         signature=request.args.get("signature")
