@@ -16,17 +16,18 @@ def weixin():
     if request.method == 'GET':
         app.logger.info("url:" + request.url)
         signature=request.args.get("signature")
-        app.logger.info("signature:"+signature)
+
+        app.logger.info("signature:"+str(signature))
         timestamp = request.args.get("timestamp")
-        app.logger.info("signature:" + signature)
+        app.logger.info("signature:" + str(timestamp))
         nonce = request.args.get("nonce")
-        app.logger.info("signature:" + signature)
+        app.logger.info("signature:" + str(nonce))
         echostr = request.args.get("echostr")
-        app.logger.info("signature:" + signature)
+        app.logger.info("signature:" + str(echostr))
 
         token = "csxwxapp"
 
-        list = [token, timestamp, nonce]
+        list = [str(token), str(timestamp),str(nonce)]
         list.sort()
         ts = ''.join(list)
 
@@ -34,9 +35,12 @@ def weixin():
         app.logger.info("hashcode:" + hashcode)
         if hashcode == signature:
             return echostr
+        else:
+            return "error"
 
 
 
 
 if __name__ == '__main__':
+    app.debug=True
     app.run(host='0.0.0.0',port=80)
