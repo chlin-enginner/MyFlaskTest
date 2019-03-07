@@ -6,6 +6,10 @@ import time
 
 from lxml import etree
 
+import sys
+
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 app = Flask(__name__)
 
@@ -47,9 +51,9 @@ def weixin():
     else:
         str_xml = request.data
 
-        # 获得post来的数据
+
         xml = etree.fromstring(str_xml)
-        # 进行XML解析
+
 
         content = xml.find("Content").text
 
