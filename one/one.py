@@ -1,55 +1,46 @@
 # -*- coding: utf-8 -*-
-
-from flask import Flask
-from flask import request
-from flask import Response
-import hashlib
-import time
-import json
-import requests
-
+from flask import Flask,request,Response
+import hashlib,time,json,requests,datetime
 from lxml import etree
-import datetime
 
 import sys
-
 reload(sys)
-
 sys.setdefaultencoding('utf-8')
 
 app = Flask(__name__)
-
 
 @app.route('/')
 def hello_world():
     return 'Hello World!'
 
 
+def tuling(content):
+    say_ai_data = {"reqType": 0, "perception": {"inputText": {"text": content}},"userInfo": {"apiKey": "3b27ac8f81ee4853be53a4d22211533a", "userId": "rudy"}}
+    api_url2 = "http://openapi.tuling123.com/openapi/api/v2"
+    req = requests.post(api_url2, json.dumps(say_ai_data)).json()
+    content = req['results'][0]['values']['text']
+    return content
+
+def lili(content):
+
+
+
+    return content
 
 @app.route('/weixin',methods=['GET','POST'])
 def weixin():
     app.logger.info("0method:"+request.method)
     app.logger.info("0url:"+request.url)
     if request.method == 'GET':
-        app.logger.info("url:" + request.url)
         signature=request.args.get("signature")
-
-        app.logger.info("signature:"+str(signature))
         timestamp = request.args.get("timestamp")
-        app.logger.info("signature:" + str(timestamp))
         nonce = request.args.get("nonce")
-        app.logger.info("signature:" + str(nonce))
         echostr = request.args.get("echostr")
-        app.logger.info("signature:" + str(echostr))
-
         token = "csxwxapp"
-
         list = [str(token), str(timestamp),str(nonce)]
         list.sort()
         ts = ''.join(list)
-
         hashcode = hashlib.sha1(ts.encode('utf-8')).hexdigest()
-        app.logger.info("hashcode:" + hashcode)
         if hashcode == signature:
             return echostr
         else:
@@ -57,12 +48,19 @@ def weixin():
     else:
         str_xml = request.data
         xml = etree.fromstring(str_xml)
-        content = xml.find("Content").text
 
+
+
+        content = xml.find("Content").text
         msgType = xml.find("MsgType").text
         fromUser = xml.find("FromUserName").text
         touserName = xml.find("ToUserName").text
         nowTime = str(time.time())
+        event=xml.find("Event").text
+
+        if str(event)=="subscribe":
+            content="/help"
+
 
         app.logger.info("content:"+str(content))
         app.logger.info("touserName:"+str(touserName))
@@ -75,16 +73,8 @@ def weixin():
 
 
         if not str(content).startswith("/"):
-            say_ai_data = {"reqType": 0, "perception": {"inputText": {"text": content}},
-                           "userInfo": {"apiKey": "3b27ac8f81ee4853be53a4d22211533a", "userId": "rudy"}}
+            content=tuling(content)
 
-            api_url2 = "http://openapi.tuling123.com/openapi/api/v2"
-
-            app.logger.info("第一次：：：：：：：：：------------》》》》》》》》》》》》")
-            req = requests.post(api_url2, json.dumps(say_ai_data)).json()
-            app.logger.info("第二次：：：：：：：：：：：：：：-----------》》》》》》》》")
-            content=req['results'][0]['values']['text']
-            app.logger.info("第三次：：：：：：：：：：：：：：-----------》》》》》》》》")
 
         if str(content)=="/help":
             content="您好！欢迎您！本号旨在探讨个人数据分析场景，并尝试使用简单、" \
