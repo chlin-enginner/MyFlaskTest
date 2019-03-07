@@ -47,7 +47,7 @@ def weixin():
 
         touserName=request.args.get("ToUserName")
         fromUser=request.args.get("FromUserName")
-        nowTime=int(time.time())
+        nowTime=str(time.time())
 
 
         res="<xml><ToUserName><![CDATA["+str(fromUser)+"]]></ToUserName><FromUserName><![CDATA["+str(touserName)+"]]></FromUserName><CreateTime>"+nowTime+"</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA["+str(content)+"]]></Content></xml>"
